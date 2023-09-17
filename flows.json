@@ -24,8 +24,70 @@
         "env": []
     },
     {
+        "id": "a75678f86a2fa3c5",
+        "type": "tab",
+        "label": "publish_to_aws",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "61c52bbd21a8af83",
         "type": "aws-config"
+    },
+    {
+        "id": "93908c083d6e1217",
+        "type": "amazon config",
+        "name": "aws-nodered-user",
+        "region": "eu-central-1",
+        "proxyRequired": false,
+        "proxy": ""
+    },
+    {
+        "id": "2346b5c7fc5a937b",
+        "type": "tls-config",
+        "name": "nodered",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "af0730bd9853e808f8dc49c01cc8476f767231ecf9b425c6a821a06e7f82b8b3-certificate.pem.crt",
+        "keyname": "af0730bd9853e808f8dc49c01cc8476f767231ecf9b425c6a821a06e7f82b8b3-private.pem.key",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "7fe81534f2abf5b9",
+        "type": "mqtt-broker",
+        "name": "aws-iot-core",
+        "broker": "a26eayk1kpcp02-ats.iot.eu-central-1.amazonaws.com",
+        "port": "8883",
+        "tls": "2346b5c7fc5a937b",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
         "id": "cc932fb064ffa58d",
@@ -145,7 +207,8 @@
         "name": "transformation_flow_out",
         "mode": "link",
         "links": [
-            "b3d40feaaf9746b5"
+            "b3d40feaaf9746b5",
+            "f87f8e144b75641a"
         ],
         "x": 865,
         "y": 200,
@@ -164,7 +227,8 @@
         "wires": [
             [
                 "f48eee817ec6ea9d",
-                "5ed8cc8621b05fd2"
+                "5ed8cc8621b05fd2",
+                "4221eb309b59593a"
             ]
         ]
     },
@@ -173,7 +237,7 @@
         "type": "debug",
         "z": "1e4229939b3f823e",
         "name": "debug 3",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -182,6 +246,19 @@
         "statusType": "auto",
         "x": 560,
         "y": 300,
+        "wires": []
+    },
+    {
+        "id": "4221eb309b59593a",
+        "type": "link out",
+        "z": "1e4229939b3f823e",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "b72e2d2b41e274a5"
+        ],
+        "x": 865,
+        "y": 260,
         "wires": []
     },
     {
@@ -205,7 +282,7 @@
         "type": "debug",
         "z": "a2d94dd3c49e8410",
         "name": "debug 4",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -214,6 +291,171 @@
         "statusType": "auto",
         "x": 560,
         "y": 100,
+        "wires": []
+    },
+    {
+        "id": "11b8e31fca1ec555",
+        "type": "mqtt out",
+        "z": "a75678f86a2fa3c5",
+        "name": "",
+        "topic": "iot_playground/device_measurements",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7fe81534f2abf5b9",
+        "x": 790,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b72e2d2b41e274a5",
+        "type": "link in",
+        "z": "a75678f86a2fa3c5",
+        "name": "publish_to_aws_in_mqtt",
+        "links": [
+            "4221eb309b59593a"
+        ],
+        "x": 435,
+        "y": 160,
+        "wires": [
+            [
+                "11b8e31fca1ec555",
+                "f79e047ef684aa10"
+            ]
+        ]
+    },
+    {
+        "id": "f87f8e144b75641a",
+        "type": "link in",
+        "z": "a75678f86a2fa3c5",
+        "name": "publish_to_aws_in_s3",
+        "links": [
+            "4dbc5d39fdbc48c4"
+        ],
+        "x": 435,
+        "y": 220,
+        "wires": [
+            [
+                "3e47a1a56578aee8"
+            ]
+        ]
+    },
+    {
+        "id": "886c9ffdbd38b818",
+        "type": "AWS S3",
+        "z": "a75678f86a2fa3c5",
+        "aws": "93908c083d6e1217",
+        "operation": "PutObject",
+        "Bucket": "node-red-iot-playground",
+        "Key": "",
+        "UploadId": "",
+        "CopySource": "",
+        "Id": "",
+        "Delete": "",
+        "AccelerateConfiguration": "",
+        "AnalyticsConfiguration": "",
+        "CORSConfiguration": "",
+        "ServerSideEncryptionConfiguration": "",
+        "IntelligentTieringConfiguration": "",
+        "InventoryConfiguration": "",
+        "BucketLoggingStatus": "",
+        "MetricsConfiguration": "",
+        "NotificationConfiguration": "",
+        "OwnershipControls": "",
+        "Policy": "",
+        "ReplicationConfiguration": "",
+        "RequestPaymentConfiguration": "",
+        "Tagging": "",
+        "VersioningConfiguration": "",
+        "WebsiteConfiguration": "",
+        "PublicAccessBlockConfiguration": "",
+        "Expression": "",
+        "ExpressionType": "",
+        "InputSerialization": "",
+        "OutputSerialization": "",
+        "PartNumber": "",
+        "name": "",
+        "x": 790,
+        "y": 220,
+        "wires": [
+            [
+                "e544bafcf6fdd664"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e544bafcf6fdd664",
+        "type": "debug",
+        "z": "a75678f86a2fa3c5",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f79e047ef684aa10",
+        "type": "debug",
+        "z": "a75678f86a2fa3c5",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3e47a1a56578aee8",
+        "type": "function",
+        "z": "a75678f86a2fa3c5",
+        "name": "define_parquet_file",
+        "func": "msg.Body = msg.payload\nvar currentdate = new Date(); \nmsg.Key = \"parquet_messages/read/\"\n                + currentdate.getUTCFullYear() + \"/\"  \n                + (currentdate.getUTCMonth()+1)  + \"/\" \n                + currentdate.getUTCDate() + \"/\"\n                + currentdate.getUTCHours() + \"/\"\n                + currentdate.getUTCFullYear() + \"-\"  \n                + (currentdate.getUTCMonth()+1)  + \"-\" \n                + currentdate.getUTCDate() + \"T\"\n                + currentdate.getUTCHours() + \"-\"\n                + currentdate.getUTCMinutes() + \"-\" \n                + currentdate.getUTCSeconds() + \"-\"\n                + currentdate.getUTCMilliseconds() + \"Z\" \n                + \".parquet\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "886c9ffdbd38b818",
+                "ac521fd9d12fe795"
+            ]
+        ]
+    },
+    {
+        "id": "ac521fd9d12fe795",
+        "type": "debug",
+        "z": "a75678f86a2fa3c5",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "Key",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 300,
         "wires": []
     }
 ]
