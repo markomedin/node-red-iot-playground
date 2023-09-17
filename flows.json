@@ -1,8 +1,24 @@
 [
     {
+        "id": "6b1f7fc294363c68",
+        "type": "tab",
+        "label": "device_messages_generator",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "1e4229939b3f823e",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "transformation_flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a2d94dd3c49e8410",
+        "type": "tab",
+        "label": "publish_to_timescaledb",
         "disabled": false,
         "info": "",
         "env": []
@@ -14,7 +30,7 @@
     {
         "id": "cc932fb064ffa58d",
         "type": "inject",
-        "z": "1e4229939b3f823e",
+        "z": "6b1f7fc294363c68",
         "name": "",
         "props": [
             {
@@ -28,13 +44,43 @@
         "topic": "",
         "payload": "[\t   {\"device_id\": \"test_val\", \"measurement\": \"test_val\", \"timestamp\": \"test_val\", \"value_text\": \"test_val\", \"value_numeric\":1, \"unit\": \"unit_val\", \"metadata\": \"d3297723fg29bcodgh0h23d\"},\t   {\"device_id\": \"test_val\", \"measurement\": \"test_val\", \"timestamp\": \"test_val\", \"value_text\": \"test_val\", \"value_numeric\":2, \"unit\": \"unit_val\", \"metadata\": \"b9fp7gf39pfb3uq37fq3fb3\"}\t]",
         "payloadType": "jsonata",
-        "x": 330,
+        "x": 350,
         "y": 200,
         "wires": [
             [
-                "f48eee817ec6ea9d"
+                "bd154ed22f7695be",
+                "4c5f001da0019a32"
             ]
         ]
+    },
+    {
+        "id": "bd154ed22f7695be",
+        "type": "link out",
+        "z": "6b1f7fc294363c68",
+        "name": "device_messages_generator_out",
+        "mode": "link",
+        "links": [
+            "892faf8072c1bfae"
+        ],
+        "x": 555,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "4c5f001da0019a32",
+        "type": "debug",
+        "z": "6b1f7fc294363c68",
+        "name": "debug 5",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 80,
+        "wires": []
     },
     {
         "id": "f48eee817ec6ea9d",
@@ -61,7 +107,8 @@
         "y": 200,
         "wires": [
             [
-                "cf3a5889245e8bf7"
+                "cf3a5889245e8bf7",
+                "4dbc5d39fdbc48c4"
             ]
         ]
     },
@@ -70,7 +117,7 @@
         "type": "debug",
         "z": "1e4229939b3f823e",
         "name": "debug 2",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -79,6 +126,94 @@
         "statusType": "auto",
         "x": 840,
         "y": 60,
+        "wires": []
+    },
+    {
+        "id": "968d846d698426e1",
+        "type": "comment",
+        "z": "1e4229939b3f823e",
+        "name": "description notes",
+        "info": "- transform and array of JSON messages to Parquet",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "4dbc5d39fdbc48c4",
+        "type": "link out",
+        "z": "1e4229939b3f823e",
+        "name": "transformation_flow_out",
+        "mode": "link",
+        "links": [
+            "b3d40feaaf9746b5"
+        ],
+        "x": 865,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "892faf8072c1bfae",
+        "type": "link in",
+        "z": "1e4229939b3f823e",
+        "name": "transformation_flow_in",
+        "links": [
+            "bd154ed22f7695be"
+        ],
+        "x": 395,
+        "y": 200,
+        "wires": [
+            [
+                "f48eee817ec6ea9d",
+                "5ed8cc8621b05fd2"
+            ]
+        ]
+    },
+    {
+        "id": "5ed8cc8621b05fd2",
+        "type": "debug",
+        "z": "1e4229939b3f823e",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b3d40feaaf9746b5",
+        "type": "link in",
+        "z": "a2d94dd3c49e8410",
+        "name": "publish_to_timescaledb_in",
+        "links": [
+            "4dbc5d39fdbc48c4"
+        ],
+        "x": 305,
+        "y": 180,
+        "wires": [
+            [
+                "8947f119bd2795c0"
+            ]
+        ]
+    },
+    {
+        "id": "8947f119bd2795c0",
+        "type": "debug",
+        "z": "a2d94dd3c49e8410",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 100,
         "wires": []
     }
 ]
