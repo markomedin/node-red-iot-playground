@@ -1,0 +1,84 @@
+[
+    {
+        "id": "1e4229939b3f823e",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "61c52bbd21a8af83",
+        "type": "aws-config"
+    },
+    {
+        "id": "cc932fb064ffa58d",
+        "type": "inject",
+        "z": "1e4229939b3f823e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[\t   {\"device_id\": \"test_val\", \"measurement\": \"test_val\", \"timestamp\": \"test_val\", \"value_text\": \"test_val\", \"value_numeric\":1, \"unit\": \"unit_val\", \"metadata\": \"d3297723fg29bcodgh0h23d\"},\t   {\"device_id\": \"test_val\", \"measurement\": \"test_val\", \"timestamp\": \"test_val\", \"value_text\": \"test_val\", \"value_numeric\":2, \"unit\": \"unit_val\", \"metadata\": \"b9fp7gf39pfb3uq37fq3fb3\"}\t]",
+        "payloadType": "jsonata",
+        "x": 330,
+        "y": 200,
+        "wires": [
+            [
+                "f48eee817ec6ea9d"
+            ]
+        ]
+    },
+    {
+        "id": "f48eee817ec6ea9d",
+        "type": "function",
+        "z": "1e4229939b3f823e",
+        "name": "json2parquet",
+        "func": "const schema = new parquet.ParquetSchema({\n      device_id: { type: \"UTF8\" },\n      measurement: { type: \"UTF8\" },\n      timestamp: { type: \"UTF8\" },\n      value_text: { type: \"UTF8\" },\n      value_numeric: { type: \"DOUBLE\" },\n      unit: { type: \"UTF8\" },\n      metadata: { type: \"UTF8\" },\n});\nconst writer = await parquet.ParquetWriter.openFile(\n  schema,\n  \"C:\\\\Users\\\\Marko\\\\tmp\\\\output.parquet\"\n);\nconst jsonData = msg.payload\nfor (const bodyRequest of jsonData) {\n    await writer.appendRow({\n      device_id: bodyRequest[\"device_id\"],\n      measurement: bodyRequest[\"measurement\"],\n      timestamp: bodyRequest[\"timestamp\"],\n      value_text: bodyRequest[\"value_text\"],\n      value_numeric: bodyRequest[\"value_numeric\"],\n      unit: bodyRequest[\"unit\"],\n      metadata: bodyRequest[\"metadata\"],\n    });\n}\n\nawait writer.close();\n\nconst fileStream = fs.createReadStream(\"C:\\\\Users\\\\Marko\\\\tmp\\\\output.parquet\");\n\nconst buffers = [];\n\n// node.js readable streams implement the async iterator protocol\nfor await (const data of fileStream) {\n  buffers.push(data);\n}\n\nmsg.payload = Buffer.concat(buffers)\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "parquet",
+                "module": "parquetjs"
+            }
+        ],
+        "x": 630,
+        "y": 200,
+        "wires": [
+            [
+                "cf3a5889245e8bf7"
+            ]
+        ]
+    },
+    {
+        "id": "cf3a5889245e8bf7",
+        "type": "debug",
+        "z": "1e4229939b3f823e",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 60,
+        "wires": []
+    }
+]
